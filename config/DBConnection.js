@@ -5,7 +5,7 @@ const mySQLDB = require('./DBConfig');
 const setUpDB = (drop) => {
     mySQLDB.authenticate()
         .then(() => {
-            console.log('genwise database connected');
+            console.log('journeyjunction database connected');
         })
         .then(() => {
             //defines the relationship where a user has many video. In this case the primary key from user will be a foreign key in video
