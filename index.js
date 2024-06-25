@@ -110,6 +110,10 @@ app.get('/404', (req,res) => {
     res.render('main', {layout: '404'});
 });
 
+app.get('/attractions', (req,res) => {
+    res.render('main', {layout: 'attractions'});
+});
+
 app.listen(port, () => {
     console.log(`Server is running on port http://localhost:${port}`);
 });
