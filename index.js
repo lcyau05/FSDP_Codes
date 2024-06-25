@@ -24,7 +24,8 @@ app.use(cookieParser());
 app.engine('hbs', exphbs.engine({
     extname: 'hbs',
     layoutsDir:__dirname+'/views/layouts',
-    partialsDir: __dirname + '/views/partials/'
+    partialsDir: __dirname + '/views/partials',
+    proDir: __dirname + '/views/products'
 }));
 
 app.set('view engine', 'hbs');
@@ -108,6 +109,10 @@ app.get('/testimonial', (req,res) => {
 
 app.get('/404', (req,res) => {
     res.render('404', {layout: 'main'});
+});
+
+app.get('/attractions', (req,res) => {
+    res.render('products/attractions', {layout: 'main', proDir: 'attractions'});
 });
 
 app.listen(port, () => {
