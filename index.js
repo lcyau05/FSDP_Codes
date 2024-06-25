@@ -71,43 +71,43 @@ app.use((req, res, next) => {
 
 // ======== Navigation =============== 
 app.get('/', (req,res) => {
-    res.render('main', {layout: 'index'});
+    res.render('index', {layout: 'main'});
 });
 
 app.get('/about', (req,res) => {
-    res.render('main', {layout: 'about'});
+    res.render('about', {layout: 'main'});
 });
 
 app.get('/booking', (req,res) => {
-    res.render('main', {layout: 'booking'});
+    res.render('booking', {layout: 'main'});
 });
 
 app.get('/service', (req,res) => {
-    res.render('main', {layout: 'service'});
+    res.render('service', {layout: 'main'});
 });
 
 app.get('/destination', (req,res) => {
-    res.render('main', {layout: 'destination'});
+    res.render('destination', {layout: 'main'});
 });
 
 app.get('/contact', (req,res) => {
-    res.render('main', {layout: 'contact'});
+    res.render('contract', {layout: 'main'});
 });
 
 app.get('/package', (req,res) => {
-    res.render('main', {layout: 'package'});
+    res.render('package', {layout: 'main'});
 });
 
 app.get('/team', (req,res) => {
-    res.render('main', {layout: 'team'});
+    res.render('team', {layout: 'main'});
 });
 
 app.get('/testimonial', (req,res) => {
-    res.render('main', {layout: 'testimonial'});
+    res.render('testimonial', {layout: 'main'});
 });
 
 app.get('/404', (req,res) => {
-    res.render('main', {layout: '404'});
+    res.render('404', {layout: 'main'});
 });
 
 app.listen(port, () => {
