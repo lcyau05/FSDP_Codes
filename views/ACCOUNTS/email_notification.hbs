@@ -1,0 +1,23 @@
+<h1>Broadcast Promotional Email</h1>
+{{#if errors}}
+<ul>
+    {{#each errors}}
+    <li>{{this.text}}</li>
+    {{/each}}
+</ul>
+{{/if}}
+<form action="/email_notifications" method="POST">
+    <div>
+        <label for="email_title">Email Title:</label>
+        <input type="text" id="email_title" name="email_title" value="{{email_title}}" required>
+    </div>
+    <div>
+        <label for="email_content">Email Content:</label>
+        <textarea id="email_content" name="email_content" value="{{email_content}}" required></textarea>
+    </div>
+    <div>
+        <label for="attachment">Attachment:</label>
+        <input type="file" id="attachment" name="attachment">
+    </div>
+    <button type="submit">Send Email</button>
+</form>

@@ -1,0 +1,54 @@
+<div class="container">
+    <div class="header">
+        <h1>Your Itinerary</h1>
+    </div>
+    <div class="content">
+        {{#each itineraryItems}}
+        <div>
+            <h2>{{date}}</h2>
+            <p><strong>Time:</strong> {{time}}</p>
+            <p><strong>Activity:</strong> {{activity}}</p>
+            <p><strong>Location:</strong> {{location}}</p>
+        </div>
+        {{/each}}
+    </div>
+    <div class="footer">
+        <p>&copy; 2024 Journey Junction. All rights reserved.</p>
+    </div>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border: 1px solid #dddddd;
+        }
+
+        .header {
+            text-align: center;
+            background-color: #f8f8f8;
+            padding: 10px 0;
+            border-bottom: 1px solid #dddddd;
+        }
+
+        .content {
+            padding: 20px;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 10px 0;
+            border-top: 1px solid #dddddd;
+            font-size: 12px;
+            color: #888888;
+        }
+    </style>

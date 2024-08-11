@@ -1,0 +1,166 @@
+<h1 style="text-align: left; padding-top: 20px;">Purchase History</h1><br>
+<button class="btn btn-primary"
+    style="background-color: transparent; color: black; border-radius: 20px; border: 2px solid #000; margin-right: 10px;"
+    onclick="purchasetab('Upcoming')">Upcoming</button>
+<button class="btn btn-primary"
+    style="background-color: transparent; color: black; border-radius: 20px; border: 2px solid #000; width: auto;"
+    onclick="purchasetab('Past')">Past Purchases</button>
+<label for="search-bar" style="margin-left: 500px;"><i class="fas fa-search"></i>&nbsp; Search: </label>
+<input type="text" id="search-bar" placeholder="Search by location or date"
+    style="margin-left: 10px; padding: 5px; border-radius: 5px; border: 1px solid #000; width:250px;"><br><br><br>
+<div style="height: 400px; overflow-y: auto; width: 90%;">
+    <div id="Upcoming" class="Icyau05">
+        <h2>Upcoming Attractions</h2>
+        {{#each upcomingAttractions}}
+        <div class="card rounded-3 mb-4 search-card" style="width: 90%;">
+            <div class="card-body p-4">
+                <div class="row d-flex justify-content-between align-items-center">
+                    <div class="col-md-2 col-lg-2 col-xl-2">
+                        <img src="{{attraction.image_path}}" class="img-fluid rounded-3" alt="{{attraction.location}}">
+                    </div>
+                    <div class="col-md-6 col-lg-6 col-xl-6">
+                        <p class="lead fw-normal mb-2">{{attraction.location}}</p>
+                        <p><span class="text-muted">{{ formatDate dateOfAttraction 'DD MMM YYYY'}}</span></p>
+                        <p><span class="text-muted">Ticket(s): </span><br>{{#ifNotEquals noOfAdults '0'}}{{noOfAdults}}
+                            x General Admission - Adult (13 years
+                            old and above){{/ifNotEquals}}<br>{{#ifNotEquals noOfChild '0'}}{{noOfChild}} x General
+                            Admission - Child (12 years
+                            old and below){{/ifNotEquals}}</p>
+                    </div>
+                    <div class="col-md-4 col-lg-3 col-xl-3 offset-lg-1">
+                        <button class="btn btn-primary view-receipt"
+                            style="font-size: 12px; width: 150px; height: 35px;" data-invoiceid="{{invoiceid}}">View
+                            E-Receipt</button><br><br>
+                        <button class="btn btn-primary view-ticket" style="font-size: 12px; width: 150px; height: 35px;"
+                            data-invoiceid="{{invoiceid}}" data-attractionid="{{attraction.id}}">View
+                            E-Tickts</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{/each}}
+    </div>
+    <div id="Past" class="Icyau05">
+        <h2>Past Attractions</h2>
+        {{#each pastAttractions}}
+        <div class="card rounded-3 mb-4 search-card" style="width: 90%;">
+            <div class="card-body p-4">
+                <div class="row d-flex justify-content-between align-items-center">
+                    <div class="col-md-2 col-lg-2 col-xl-2">
+                        <img src="{{attraction.image_path}}" class="img-fluid rounded-3" alt="{{attraction.location}}">
+                    </div>
+                    <div class="col-md-6 col-lg-6 col-xl-6">
+                        <p class="lead fw-normal mb-2">{{attraction.location}}</p>
+                        <p><span class="text-muted">{{ formatDate dateOfAttraction 'DD MMM YYYY'}}</span></p>
+                        <p><span class="text-muted">Ticket(s): </span><br>{{#ifNotEquals noOfAdults '0'}}{{noOfAdults}}
+                            x General Admission - Adult (13 years
+                            old and above){{/ifNotEquals}}<br>{{#ifNotEquals noOfChild '0'}}{{noOfChild}} x General
+                            Admission - Child (12 years
+                            old and below){{/ifNotEquals}}</p>
+                    </div>
+                    <div class="col-md-4 col-lg-3 col-xl-3 offset-lg-1">
+                        <button class="btn btn-primary view-receipt"
+                            style="font-size: 12px; width: 150px; height: 35px;" data-invoiceid="{{invoiceid}}">View
+                            E-Receipt</button><br><br>
+                        <button class="btn btn-primary leave-review"
+                            style="font-size: 12px; width: 150px; height: 35px;" data-invoiceid="{{invoiceid}}"
+                            data-attractionid="{{attraction.id}}">Leave Review</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{/each}}
+    </div>
+</div>
+<br><br><br><br>
+<script>
+    function purchasetab(purpose) {
+        var i;
+        var x = document.getElementsByClassName("Icyau05");
+        for (i = 0; i < x.length; i++) {
+            x[i].style.display = "none";
+        }
+        document.getElementById(purpose).style.display = "block";
+    }
+    // Set the default tab to be displayed when the page loads
+    window.onload = function () {
+        purchasetab('Upcoming');
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        // Add click event listeners to all buttons with class 'view-policy'
+        document.querySelectorAll('.view-receipt').forEach(button => {
+            button.addEventListener('click', async function () {
+                const invoiceid = this.getAttribute('data-invoiceid');
+                $.ajax({
+                    type: 'POST',
+                    url: '/paycs/viewReceipt', // Adjust the URL as per your backend route
+                    data: { invoiceid: invoiceid },
+                    success: function (response) {
+                        console.log('Feature updated successfully:', response);
+                        window.location.href = '/invoice'; // Redirect to success page
+                    },
+                    error: function (err) {
+                        console.error('Error updating feature:', err);
+                        // Handle errors
+                    }
+                });
+            });
+        });
+
+        // Add click event listeners to all buttons with class 'file-claim'
+        document.querySelectorAll('.view-ticket').forEach(button => {
+            button.addEventListener('click', async function () {
+                const invoiceid = this.getAttribute('data-invoiceid');
+                const attractionid = this.getAttribute('data-attractionid');
+                $.ajax({
+                    type: 'POST',
+                    url: '/paycs/viewTicket', // Adjust the URL as per your backend route
+                    data: { invoiceid: invoiceid, attractionid: attractionid },
+                    success: function (response) {
+                        console.log('Feature updated successfully:', response);
+                        window.location.href = '/tickets'; // Redirect to success page
+                    },
+                    error: function (err) {
+                        console.error('Error updating feature:', err);
+                        // Handle errors
+                    }
+                });
+            });
+        });
+        // Add click event listeners to all buttons with class 'file-claim'
+        document.querySelectorAll('.leave-review').forEach(button => {
+            button.addEventListener('click', async function () {
+                const invoiceid = this.getAttribute('data-invoiceid');
+                const attractionid = this.getAttribute('data-attractionid');
+                $.ajax({
+                    type: 'POST',
+                    url: '/paycs/leaveReview', // Adjust the URL as per your backend route
+                    data: { invoiceid: invoiceid, attractionid: attractionid },
+                    success: function (response) {
+                        console.log('Feature updated successfully:', response);
+                        window.location.href = '/review'; // Redirect to success page
+                    },
+                    error: function (err) {
+                        console.error('Error updating feature:', err);
+                        // Handle errors
+                    }
+                });
+            });
+        });
+        // Implement search functionality
+        document.getElementById('search-bar').addEventListener('input', function () {
+            var searchQuery = this.value.toLowerCase();
+            var cards = document.querySelectorAll('.search-card');
+            cards.forEach(card => {
+                var location = card.querySelector('.lead').textContent.toLowerCase();
+                var date = card.querySelector('.text-muted').textContent.toLowerCase();
+                if (location.includes(searchQuery) || date.includes(searchQuery)) {
+                    card.style.display = '';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    });
+</script>

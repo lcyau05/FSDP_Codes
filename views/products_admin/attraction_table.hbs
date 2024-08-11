@@ -1,0 +1,220 @@
+<style>
+    .container {
+        width: 100%;
+        margin: 0 auto;
+        font-family: Arial, sans-serif;
+    }
+
+    .record-count {
+        text-align: center;
+        margin-bottom: 20px;
+        font-size: 1.2em;
+        color: #4CAF50;
+        /* same color as the table header */
+    }
+
+    h3 {
+        text-align: center;
+        color: #333;
+        margin-bottom: 20px;
+    }
+
+    .record-count {
+        text-align: center;
+        margin-bottom: 20px;
+        font-size: 1.2em;
+        color: #333;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+    }
+
+    table,
+    th,
+    td {
+        border: 1px solid #ddd;
+    }
+
+    th,
+    td {
+        padding: 12px;
+        text-align: left;
+    }
+
+    th {
+        background-color: #f2f2f2;
+        color: #333;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+    tr:hover {
+        background-color: #f1f1f1;
+    }
+
+    td {
+        color: #555;
+    }
+
+    th {
+        background-color: #d9f007cc;
+        color: rgb(24, 4, 4);
+    }
+
+    td,
+    th {
+        text-align: center;
+    }
+
+    .update-form {
+        display: none;
+        /* Hide by default */
+    }
+</style>
+<div class="container">
+    {{#if attracts}}
+    <h3>Attractions Database Records</h3>
+    <div class="record-count">
+        Total Records: {{attracts.length}}
+    </div>
+
+    <table border="2">
+        <thead>
+            <tr>
+                <th>LOCATION</th>
+                <th>PRICE ADULT</th>
+                <th>PRICE CHILD</th>
+                <th>IMAGE PATH</th>
+                <th>UPDATE</th>
+                <th>DISABLE</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each attracts}}
+            {{#unless disabled}}
+            <tr>
+                <td>{{location}}</td>
+                <td>{{priceadult}}</td>
+                <td>{{pricechild}}</td>
+                <td>{{image_path}}</td>
+                <td>
+                    <button
+                        onclick="showUpdateForm('{{id}}', '{{location}}', '{{priceadult}}', '{{pricechild}}', '{{image_path}}')">Update</button>
+                </td>
+                <td>
+                    <button type="button" onclick="disableRecord('{{id}}')">Disable</button>
+                </td>
+            </tr>
+            {{/unless}}
+            {{/each}}
+        </tbody>
+    </table>
+
+    <h3>Disabled Records</h3>
+    <table border="2" class="hidden-table" id="disabled-records-table">
+        <thead>
+            <tr>
+                <th>LOCATION</th>
+                <th>PRICE ADULT</th>
+                <th>PRICE CHILD</th>
+                <th>IMAGE PATH</th>
+                <th>ENABLE</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each attracts}}
+            {{#if disabled}}
+            <tr>
+                <td>{{location}}</td>
+                <td>{{priceadult}}</td>
+                <td>{{pricechild}}</td>
+                <td>{{image_path}}</td>
+                <td>
+                    <button type="button" onclick="enableRecord('{{id}}')">Enable</button>
+                </td>
+            </tr>
+            {{/if}}
+            {{/each}}
+        </tbody>
+    </table>
+
+    <div id="update-form" style="display: none;">
+        <h3>Update Attraction</h3>
+        <form action="/attractions/updateAttraction" method="POST">
+            <input type="hidden" id="update-id" name="id">
+            <label for="update-location">Location:</label>
+            <input type="text" id="update-location" name="location" required>
+            <br>
+            <label for="update-priceadult">Price Adult:</label>
+            <input type="number" id="update-priceadult" name="priceadult" step="0.01" required>
+            <br>
+            <label for="update-pricechild">Price Child:</label>
+            <input type="number" id="update-pricechild" name="pricechild" step="0.01" required>
+            <br>
+            <label for="update-image_path">Image Path:</label>
+            <input type="text" id="update-image_path" name="image_path" required>
+            <br>
+            <button type="submit">Update</button>
+
+        </form>
+    </div>
+    {{else}}
+    <h3>No Records Found</h3>
+    {{/if}}
+</div>
+
+<script>
+    function showUpdateForm(id, location, priceadult, pricechild, image_path) {
+        document.getElementById('update-form').style.display = 'block';
+        document.getElementById('update-id').value = id;
+        document.getElementById('update-location').value = location;
+        document.getElementById('update-priceadult').value = priceadult;
+        document.getElementById('update-pricechild').value = pricechild;
+        document.getElementById('update-image_path').value = image_path;
+    }
+
+    function disableRecord(id) {
+        if (confirm("Are you sure you want to disable this record?")) {
+            fetch(`/disable/${id}`, {
+                method: 'PUT',
+            })
+                .then(response => {
+                    if (response.ok) {
+                        location.reload();
+                        alert("Record disabled successfully");
+                    } else {
+                        alert("Failed to disable the record");
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert("Failed to disable the record");
+                });
+        }
+    }
+
+    function enableRecord(id) {
+        if (confirm("Are you sure you want to enable this record?")) {
+            fetch(`/enable/${id}`, {
+                method: 'PUT',
+            })
+                .then(response => {
+                    if (response.ok) {
+                        location.reload();
+                        alert("Record enabled successfully");
+                    } else {
+                        alert("Failed to enable the record");
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert("Failed to enable the record");
+                });
+        }
+    }
+</script>

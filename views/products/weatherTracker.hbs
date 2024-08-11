@@ -1,0 +1,124 @@
+<style>
+        /* Container styling */
+        .weather-container {
+            margin: 20px auto;
+            padding: 20px;
+            max-width: 800px; /* Center align and limit width */
+            background-color: #f9f9f9; /* Light background color */
+            border-radius: 8px; /* Rounded corners */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Box shadow for depth */
+            font-family: Arial, sans-serif;
+        }
+
+        /* Header styling */
+        .weather-container h2 {
+            font-size: 1.8rem; /* Larger font size for the header */
+            color: #333; /* Darker text color */
+            margin-bottom: 15px;
+            text-align: center; /* Center align the header */
+        }
+
+        /* Input and button styling */
+        #search-area {
+            width: calc(100% - 110px); /* Full width minus button width */
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 1rem;
+            margin-right: 10px; /* Space between input and button */
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 1rem;
+            color: #fff;
+            background-color: #4CAF50;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        /* Weather card styling */
+        .weather-card {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px; /* Rounded corners for cards */
+            background-color: #ffffff; /* White background for cards */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Box shadow for cards */
+        }
+
+        .weather-card p {
+            margin: 5px 0; /* Space between paragraphs */
+        }
+
+        .weather-card p strong {
+            color: #333; /* Darker color for labels */
+        }
+</style>
+
+<div class="weather-container" id="weather-container">
+        <h2>2-Hour Weather Forecast</h2>
+        <input type="text" id="search-area" placeholder="Enter area to search">
+        <button onclick="filterByArea()">Search</button>
+        <br>
+        <br>
+        <div id="weather-content"></div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const weatherContainer = document.getElementById('weather-content');
+            let forecasts = [];
+
+            // Function to fetch weather data from the API
+            async function fetchWeatherData() {
+                try {
+                    const response = await fetch('https://api.data.gov.sg/v1/environment/2-hour-weather-forecast');
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    const data = await response.json();
+                    forecasts = data.items[0].forecasts; // Store the forecasts
+                    displayWeatherData(forecasts);
+                } catch (error) {
+                    console.error('Error fetching weather data:', error);
+                }
+            }
+
+            // Function to display weather data on the webpage
+            function displayWeatherData(forecasts) {
+                weatherContainer.innerHTML = ''; // Clear any existing content
+                forecasts.forEach(forecast => {
+                    const weatherCard = document.createElement('div');
+                    weatherCard.className = 'weather-card';
+                    weatherCard.innerHTML = `
+                        <p><strong>Area:</strong> ${forecast.area}</p>
+                        <p><strong>Forecast:</strong> ${forecast.forecast}</p>
+                    `;
+                    weatherContainer.appendChild(weatherCard);
+                });
+            }
+
+            // Function to filter weather data by area
+            function filterByArea() {
+                const searchArea = document.getElementById('search-area').value.toLowerCase();
+                const filteredForecasts = forecasts.filter(forecast => 
+                    forecast.area.toLowerCase().includes(searchArea)
+                );
+                displayWeatherData(filteredForecasts);
+            }
+
+            // Expose filterByArea function to the global scope
+            window.filterByArea = filterByArea;
+
+            // Fetch and display weather data on page load
+            fetchWeatherData();
+        });
+    </script>

@@ -1,0 +1,59 @@
+<style>
+    .container {
+        text-align: center;
+    }
+
+    .otp_form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .row {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        margin-bottom: 15px;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 10px;
+        margin-top: 5px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+    }
+
+    label {
+        width: 100%;
+        text-align: left;
+    }
+
+    button {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+
+        color: white;
+        cursor: pointer;
+    }
+
+    button:hover {}
+</style>
+
+<div class="container">
+    <h2>Verify OTP</h2>
+    <form action="/user/login" method="post" class="otp_form">
+        <input type="hidden" name="userId" value="{{userId}}">
+        <div class="row">
+            <div class="col-lg-6 col-md-12">
+                <label for="otp">OTP:</label>
+                <input type="text" id="otp" name="otp" class="form-control" required>
+            </div>
+        </div>
+        {{#if error}}
+        <p style="color: red;">{{error}}</p>
+        {{/if}}
+        <button type="submit">Verify</button>
+    </form>
+</div>

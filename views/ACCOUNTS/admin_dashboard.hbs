@@ -1,0 +1,49 @@
+<div class="container">
+    <h1>Admin Dashboard</h1>
+    <div class="row">
+        <div class="col-md-4">
+            <h4>User's Gender Distribution</h4>
+            <canvas id="genderChart"></canvas>
+        </div>
+        <div class="col-md-4">
+            <h4>User's Growth Distribution</h4>
+            <canvas id="growthChart"></canvas>
+        </div>
+    </div>
+</div>
+<script>
+    const chartData = {{{ json data }}}; // Pass data to client-side script
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const ctxGender = document.getElementById('genderChart').getContext('2d');
+        const ctxGrowth = document.getElementById('growthChart').getContext('2d');
+
+        // Gender Chart
+        new Chart(ctxGender, {
+            type: 'pie',
+            data: {
+                labels: chartData.genderData.map(item => item.gender),
+                datasets: [{
+                    label: 'Gender Distribution',
+                    data: chartData.genderData.map(item => item.count),
+                    backgroundColor: ['rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)'],
+                    borderWidth: 1
+                }]
+            }
+        });
+
+        // Growth Chart
+        new Chart(ctxGrowth, {
+            type: 'line',
+            data: {
+                labels: chartData.growthData.map(item => item.month),
+                datasets: [{
+                    label: 'User Growth',
+                    data: chartData.growthData.map(item => item.count),
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            }
+        });
+    });
+</script>

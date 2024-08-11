@@ -1,0 +1,297 @@
+<link href='https://api.mapbox.com/mapbox-gl-js/v2.8.1/mapbox-gl.css' rel='stylesheet' />
+<script src='https://api.mapbox.com/mapbox-gl-js/v2.8.1/mapbox-gl.js'></script>
+<script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.0/mapbox-gl-geocoder.min.js'></script>
+<link rel='stylesheet'
+    href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.0/mapbox-gl-geocoder.css'
+    type='text/css' />
+<style>
+    body {
+        font-family: 'Nunito', sans-serif;
+        background-color: white;
+        margin: 0;
+        padding: 0;
+        color: #333;
+    }
+
+    h1 {
+        color: #444;
+        margin: 20px 0;
+    }
+
+    .container-product {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .attraction-image {
+        width: 100%;
+        height: auto;
+        border-radius: 8px;
+        margin-bottom: 20px;
+    }
+
+    h2 {
+        margin: 10px 0;
+        color: #555;
+    }
+
+    p {
+        font-size: 18px;
+        margin: 5px 0;
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    label {
+        font-weight: bold;
+        color: #555;
+    }
+
+    input[type="date"],
+    input[type="number"] {
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 16px;
+        box-sizing: border-box;
+    }
+
+    .button-container {
+        display: flex;
+        gap: 10px;
+        justify-content: flex-start;
+    }
+
+    button {
+        background-color: #28a745;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        padding: 10px 15px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        width: auto;
+    }
+
+    button:hover {
+        background-color: #218838;
+    }
+
+    .view-all-button {
+        background-color: #007bff;
+    }
+
+    .view-all-button:hover {
+        background-color: #0056b3;
+    }
+
+    .view-weather {
+        background-color: #ccc34b;
+    }
+
+    .view-weather:hover {
+        background-color: #ffee008c;
+    }
+
+    .error-message {
+        color: red;
+        font-size: 14px;
+        margin-top: 10px;
+    }
+</style>
+
+
+
+<div class="container-xxl py-5">
+    <div class="container">
+        <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+            <h1 class="mb-5">BOOK YOUR ATTRACTIONS</h1>
+            <h6 class="section-title bg-white text-center text-primary px-3">- ENJOY YOUR TIME IN SINGAPORE WITH US -
+            </h6>
+        </div>
+    </div>
+</div>
+
+<div class="container-product">
+    <img src="{{attraction.image_path}}" alt="{{attraction.location}}" class="attraction-image" />
+    <h2>{{attraction.location}}</h2>
+    <p>Adult: ${{attraction.priceadult}}</p>
+    <p>Child: ${{attraction.pricechild}}</p>
+
+    <form action="/paycs/addCart" id="addCart" method="POST">
+        <input type="hidden" name="attractionId" id="attractionId" value="{{attraction.id}}">
+        <label for="date">Date:</label>
+        <input type="date" id="date" name="date" required>
+        <label for="adultQuantity">Number of Adults:</label>
+        <input type="number" id="adultQuantity" name="adultQuantity" min="0" max="5" value="0" style="width: 100px;"
+            required>
+        <label for="childQuantity">Number of Children:</label>
+        <input type="number" id="childQuantity" name="childQuantity" min="0" max="5" value="0" style="width: 100px;"
+            required>
+
+
+        <button class="wishlist-button" data-attraction-id="{{attraction.id}}">Add to Wishlist</button>
+        <div class="button-container">
+            <button type="submit">Confirm Booking</button>
+            <button type="button" class="view-all-button" onclick="window.location.href='/retrieveAttract'">Back to
+                Product Listings</button>
+            <button type="button" class="view-weather" onclick="window.location.href='/weatherTracker'">Weather
+                Tracker</button>
+            <button type="button" class="view-all-button" onclick="window.location.href='/retrieveItinerary'">Retrieve Itinerary</button>
+        </div>
+    </form>
+</div>
+
+<div class="container-product">
+    <div id="map" style="width: 100%; height: 400px;"></div>
+    <div id="geocoder" style="width: 100%; margin-bottom: 20px;" value="{{attraction.location}}"></div>
+    <!-- Existing content -->
+</div>
+
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Function to set the minimum and maximum date for the date input
+        function setDateConstraints() {
+            const today = new Date();
+            const yyyy = today.getFullYear();
+            let mm = today.getMonth() + 1; // Months are zero-based
+            let dd = today.getDate();
+
+            // Add leading zeroes for month and date
+            if (mm < 10) mm = '0' + mm;
+            if (dd < 10) dd = '0' + dd;
+
+            // Set minimum date to today
+            const minDate = yyyy + '-' + mm + '-' + dd;
+            document.getElementById('date').setAttribute('min', minDate);
+
+            // Calculate date one month from today
+            const oneMonthFromToday = new Date(today);
+            oneMonthFromToday.setMonth(today.getMonth() + 1);
+
+            const yyyyPlusOneMonth = oneMonthFromToday.getFullYear();
+            let mmPlusOneMonth = oneMonthFromToday.getMonth() + 1; // Months are zero-based
+            let ddPlusOneMonth = oneMonthFromToday.getDate();
+
+            // Add leading zeroes for month and date
+            if (mmPlusOneMonth < 10) mmPlusOneMonth = '0' + mmPlusOneMonth;
+            if (ddPlusOneMonth < 10) ddPlusOneMonth = '0' + ddPlusOneMonth;
+
+            // Set maximum date to one month from today
+            const maxDate = yyyyPlusOneMonth + '-' + mmPlusOneMonth + '-' + ddPlusOneMonth;
+            document.getElementById('date').setAttribute('max', maxDate);
+        }
+
+        // Set date constraints on page load
+        setDateConstraints();
+
+        document.getElementById('adultQuantity').addEventListener('input', restrictAdultInput);
+        document.getElementById('childQuantity').addEventListener('input', restrictChildInput);
+
+        function restrictAdultInput(event) {
+            const adultInput = document.getElementById('adultQuantity');
+            adultInput.value = adultInput.value.replace(/[^0-9]/g, '');
+        }
+
+        function restrictChildInput(event) {
+            const childInput = document.getElementById('childQuantity');
+            childInput.value = childInput.value.replace(/[^0-9]/g, '');
+        }
+
+        // Mapbox initialization
+        mapboxgl.accessToken = 'pk.eyJ1IjoieWFuLXJlbnh1YW4iLCJhIjoiY2x5d3FndHpzMDE3YjJqcHNuaWViMDR0NCJ9.i8r900Y38reUA-dlCFlQLg';
+        const map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/streets-v11',
+            center: [103.8198, 1.3521], // Coordinates of Singapore
+            zoom: 12
+        });
+
+        const geocoder = new MapboxGeocoder({
+            accessToken: mapboxgl.accessToken,
+            mapboxgl: mapboxgl,
+            placeholder: 'Search for a venue in Singapore',
+            countries: 'sg'
+        });
+
+        document.getElementById('geocoder').appendChild(geocoder.onAdd(map));
+
+        geocoder.on('result', function (e) {
+            map.flyTo({
+                center: e.result.center,
+                zoom: 15
+            });
+
+            new mapboxgl.Marker()
+                .setLngLat(e.result.center)
+                .addTo(map);
+        });
+
+        document.getElementById('addCart').addEventListener('submit', async function (event) {
+            event.preventDefault(); // Prevent default form submission
+
+            const formData = {
+                attractionId: document.getElementById('attractionId').value,
+                dateOfAttraction: document.getElementById('date').value,
+                adultQuantity: document.getElementById('adultQuantity').value,
+                childQuantity: document.getElementById('childQuantity').value
+            };
+
+            try {
+                const response = await fetch('/paycs/addCart', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                window.location.href = '/cart'; // Redirect to success page
+            } catch (error) {
+                console.error('Error while submitting form:', error);
+            }
+        });
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.wishlist-button').forEach(button => {
+        button.addEventListener('click', function () {
+            const attractionId = this.getAttribute('data-attraction-id');
+
+            fetch('/attractions/wishlist/add', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ attractionId })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Attraction added to wishlist!');
+                } else {
+                    alert('Failed to add attraction to wishlist.');
+                }
+            })
+            .catch(error => {
+                console.error('Error adding to wishlist:', error);
+            });
+        });
+    });
+});
+
+</script>

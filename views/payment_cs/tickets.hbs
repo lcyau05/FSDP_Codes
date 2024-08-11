@@ -1,0 +1,139 @@
+<br><br><br>
+{{#each tickets}}
+<div class="ticket">
+    <div class="left">
+        <img class="ticket-image" src="{{../attraction.image_path}}" alt="Ticket Image">
+    </div>
+    <div class="ticket-info">
+        <div class="show-name">
+            <h1>{{../attraction.location}}</h1>
+        </div>
+        <div class="time">
+            <p>{{ formatDate ../cart.dateOfAttraction 'DD MMM YYYY'}}</p>
+            {{this.description}}
+        </div>
+        <p class="location">
+            <span>Journey</span>
+            <span class="separator"><i class="far fa-smile"></i></span>
+            <span>Junction</span>
+        </p>
+    </div>
+    <div class="right">
+        <div class="barcode">
+            <img src="{{this.qrCode}}" alt="QR code">
+            <p class="ticket-number">#{{this.ticketId}}</p>
+            {{#if redeemed}}<span style="color: red;">REDEEMED{{this.redeemed}}</span>{{/if}}
+        </div>
+    </div>
+</div><br><br>
+{{/each}}
+
+<style>
+    @import url("https://fonts.googleapis.com/css2?family=Staatliches&display=swap");
+    @import url("https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap");
+
+    body {
+        height: 100vh;
+        display: grid;
+        font-family: "Staatliches", cursive;
+        background: #FAD676;
+        color: black;
+        font-size: 14px;
+        letter-spacing: 0.1em;
+    }
+
+    .ticket {
+        margin: 0 auto;
+        display: flex;
+        background: white;
+        box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
+        min-height: 250px;
+        /* Ensure ticket height */
+        height: 250px;
+        /* Expand based on content */
+    }
+
+    .left {
+        display: flex;
+        flex-direction: column;
+        position: relative;
+    }
+
+    .ticket-image {
+        height: 250px;
+        width: 250px;
+        object-fit: cover;
+        /* Ensure the image covers the container while preserving aspect ratio */
+    }
+
+    .ticket-info {
+        padding: 50px 50px;
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+        justify-content: space-between;
+        align-items: center;
+        margin: 0 auto;
+    }
+
+    .date {
+        border-top: 1px solid gray;
+        border-bottom: 1px solid gray;
+        padding: 5px 0;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+    }
+
+    .date span {
+        width: 100px;
+    }
+
+    .date span:first-child {
+        text-align: left;
+    }
+
+    .date span:last-child {
+        text-align: right;
+    }
+
+    .date .june-29 {
+        color: #d83565;
+        font-size: 20px;
+    }
+
+    .location {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        width: 100%;
+        padding-top: 8px;
+        border-top: 1px solid gray;
+    }
+
+    .location .separator {
+        font-size: 20px;
+    }
+
+    .right {
+        width: 180px;
+        border-left: 1px dashed #404040;
+        display: flex;
+        align-items: center;
+    }
+
+    .barcode {
+        height: 100px;
+        margin: 0 auto;
+        text-align: center;
+    }
+
+    .barcode img {
+        height: 100%;
+    }
+
+    .right .ticket-number {
+        color: gray;
+    }
+</style>

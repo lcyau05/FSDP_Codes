@@ -1,0 +1,247 @@
+<style>
+    body {
+        font-family: 'Nunito', sans-serif;
+    }
+
+    .container-xxl {
+        padding-top: 50px;
+        padding-bottom: 50px;
+    }
+
+    .container .text-center h1 {
+        font-size: 2.5em;
+        margin-bottom: 0.5em;
+    }
+
+    .section-title {
+        display: inline-block;
+        padding: 0.5em 1em;
+        background-color: white;
+        color: #007bff;
+        border-radius: 5px;
+        margin-bottom: 1em;
+    }
+
+    .currency-converter {
+        width: 80%;
+        max-width: 600px;
+        margin: 20px auto;
+        background-color: #f0f0f0;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+
+    .currency-converter .form-field {
+        margin-bottom: 15px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .currency-converter .form-label {
+        flex: 1;
+        text-align: left;
+        margin-right: 10px;
+        font-weight: bold;
+    }
+
+    .currency-converter input,
+    .currency-converter select {
+        flex: 1;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 14px;
+        box-sizing: border-box;
+    }
+
+    .currency-converter button {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        background-color: #4CAF50;
+        color: white;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s ease;
+        margin-top: 20px;
+    }
+
+    .currency-converter button:hover {
+        background-color: #45a049;
+    }
+
+    .currency-converter .result {
+        margin-top: 20px;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .currency {
+        display: block;
+        margin: 0 auto;
+        width: 120px;
+        height: auto;
+    }
+
+    .view-all-container {
+        text-align: center;
+        margin-right: 20px;
+    }
+
+    .view-all-button {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        background-color: #5f5f5f;
+        color: white;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s ease;
+        margin-top: 20px;
+    }
+
+    .view-all-button:hover {
+        background-color: #4a4a4a;
+    }
+
+    .feedback-message {
+        text-align: center;
+        margin-top: 20px;
+        display: none;
+    }
+
+    .success {
+        color: green;
+    }
+
+    .error {
+        color: red;
+        font-weight: normal;
+        /* Remove boldness */
+    }
+
+    .sidebar {
+        width: 250px;
+        background-color: #ffffff;
+        padding: 20px;
+        color: #333;
+        height: 100vh;
+        position: fixed;
+        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .sidebar h2 {
+        color: #ebca5f;
+        text-align: left;
+        margin-bottom: 20px;
+        font-size: 20px;
+    }
+
+    .sidebar ul {
+        list-style: none;
+        padding: 0;
+    }
+
+    .sidebar ul li {
+        margin-bottom: 20px;
+    }
+
+    .sidebar ul li a {
+        color: #333;
+        text-decoration: none;
+        font-size: 18px;
+        display: block;
+        padding: 10px;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+    }
+
+    .sidebar ul li a:hover {
+        background-color: #ebca5f;
+        color: #fff;
+    }
+</style>
+<div class="sidebar">
+    <h2>Currency Converter</h2>
+    <ul>
+        <li><a href="/budgetdashboard">Budget Dashboard</a></li>
+        <li><a href="/budgetform">Add Budget</a></li>
+        <li><a href="/expensesdashboard">Expenses Dashboard</a></li>
+        <li><a href="/expensesform">Add Expenses</a></li>
+    </ul>
+</div>
+
+<div class="container-xxl py-5">
+    <div class="container">
+        <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+            <h1 class="mb-5">CONVERTER</h1>
+            <h6 class="section-title bg-white text-center text-primary px-3">- FROM SGD TO THE CURRENCY YOU WANT -</h6>
+        </div>
+    </div>
+</div>
+
+<img class="currency" src="/img/convert.jpg" alt="Currency Conversion">
+
+<div class="currency-converter">
+    <div class="form-field">
+        <label for="amount" class="form-label">Singapore Dollar (SGD): </label>
+        <input type="number" id="amount" placeholder="Amount" />
+    </div>
+    <div class="form-field">
+        <label for="currency" class="form-label">Convert To: </label>
+        <select id="currency">
+            <option value="USD">United States Dollar</option>
+            <option value="EUR">Euro</option>
+            <option value="GBP">Pound Sterling</option>
+            <option value="HKD">Hong Kong Dollar</option>
+            <option value="JPY">Japanese Yen</option>
+            <option value="MYR">Malaysian Ringgit</option>
+            <option value="KRW">South Korean Won</option>
+        </select>
+    </div>
+    <button onclick="convertCurrency()">Convert</button>
+    <div class="result" id="conversionResult"></div>
+    <div class="feedback-message" id="feedbackMessage"></div>
+</div>
+
+<div class="view-all-container">
+    <button type="button" class="view-all-button" onclick="window.location.href='/expensesdashboard'">
+        Return To Dashboard
+    </button>
+</div>
+
+<script>
+    async function convertCurrency() {
+        const amount = document.getElementById('amount').value;
+        const currency = document.getElementById('currency').value;
+        const resultElement = document.getElementById('conversionResult');
+        const feedbackMessage = document.getElementById('feedbackMessage');
+
+        if (!amount || amount <= 0) {
+            feedbackMessage.textContent = 'Please enter a valid amount.';
+            feedbackMessage.classList.remove('success');
+            feedbackMessage.classList.add('error');
+            feedbackMessage.style.display = 'block';
+            return;
+        }
+
+        try {
+            const response = await fetch('/api/exchange-rates');
+            const data = await response.json();
+            const rate = data.data[currency].value;
+            const convertedAmount = (amount * rate).toFixed(2);
+            resultElement.textContent = `Converted Amount: ${currency} ${convertedAmount}`;
+            feedbackMessage.textContent = '';
+            feedbackMessage.style.display = 'none';
+        } catch (error) {
+            console.error('Error converting currency:', error);
+            feedbackMessage.textContent = 'Error converting currency.';
+            feedbackMessage.classList.remove('success');
+            feedbackMessage.classList.add('error');
+            feedbackMessage.style.display = 'block';
+        }
+    }
+</script>

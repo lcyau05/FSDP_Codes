@@ -1,0 +1,222 @@
+<div class="container-xxl py-5">
+    <div class="container">
+        <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+            <h6 class="section-title bg-white text-center text-primary px-3">- LEAVE REVIEW -</h6>
+            <h1 class="mb-5">FEEDBACK FORM</h1>
+        </div>
+    </div>
+</div>
+<form class="review" id="reviewForm" action="/paycs/submitReview" method="post"
+    style="width: 80%; padding: 20px; margin: 0 auto;">
+    <div class="row g-3">
+        <h4>Full Name</h4>
+        <div class="col-lg-12 col-xl-7">
+            <div class="form-floating">
+                {{#ifEquals role 'Admin'}}
+                <input type="text" class="form-control" id="fname" placeholder="First Name" name="firstName"
+                    value="{{review.first_name}}" readonly>{{/ifEquals}}
+                {{#ifNotEquals role 'Admin'}}<input type="text" class="form-control" id="fname" placeholder="First Name"
+                    name="firstName" {{#unless review.first_name}}value="{{user_name}}"{{/unless}} {{#if review.first_name}}value="{{review.first_name}}"{{/if}} required>{{/ifNotEquals}}
+                <label for="fname">First Name</label>
+                <span class="validation-message" id="fnameMessage"></span>
+            </div>
+        </div>
+        <div class="col-lg-12 col-xl-5">
+            <div class="form-floating">
+                {{#ifEquals role 'Admin'}}
+                <input type="text" class="form-control" id="lname" placeholder="Last Name" name="lastName"
+                    value="{{review.last_name}}" readonly>{{/ifEquals}}
+                {{#ifNotEquals role 'Admin'}}
+                <input type="text" class="form-control" id="lname" placeholder="Last Name" name="lastName"
+                    {{#unless review.last_name}}value="{{user.last_name}}"{{/unless}} {{#if review.last_name}}value="{{review.last_name}}"{{/if}} required>{{/ifNotEquals}}
+                <label for="lname">Last Name</label>
+                <span class="validation-message" id="lnameMessage"></span>
+            </div>
+        </div>
+        <h4 style="padding-top: 20px;">Email</h4>
+        <div class="col-lg-12">
+            <div class="form-floating">
+                {{#ifEquals role 'Admin'}}<input type="email" class="form-control" id="email"
+                    placeholder="Email Address" name="email" value="{{review.email}}" readonly>{{/ifEquals}}
+                {{#ifNotEquals role 'Admin'}}<input type="email" class="form-control" id="email"
+                    placeholder="Email Address" name="email" {{#unless review.email}}value="{{user.email}}"{{/unless}} {{#if review.email}}value="{{review.email}}"{{/if}} required>{{/ifNotEquals}}
+                <label for="email">Email Address</label>
+                <span class="validation-message" id="emailMessage"></span>
+            </div>
+        </div>
+        <h4 style="padding-top: 20px; padding-bottom: 20px;">Attraction</h4>
+        <div class="card rounded-3 mb-4" style="width: 80%; margin: 0 auto;">
+            <div class="card-body p-4">
+                <div class="row d-flex justify-content-between align-items-center">
+                    <div class="col-md-4 col-lg-4 col-xl-4" style="margin: 0 auto;">
+                        <img src="{{attraction.image_path}}" class="img-fluid rounded-3" alt="{{attraction.location}}"
+                            style="width: 500px; height:250px;">
+                    </div>
+                    <div class="col-md-6 col-lg-6 col-xl-6" style="margin: 0 auto;">
+                        <p class="lead fw-normal mb-2">{{attraction.location}}
+                        </p>
+                        <p><span class="text-muted">Date: {{ formatDate cart.dateOfAttraction 'DD MMM
+                                YYYY'}}</span></p>
+                        <p><span class="text-muted">Invoice ID: </span>{{cart.invoiceid}}</p>
+                        <p><span class="text-muted">Ticket(s): </span><br>{{#ifNotEquals cart.noOfAdults
+                            '0'}}{{cart.noOfAdults}}
+                            x General Admission - Adult (13 years
+                            old and above){{/ifNotEquals}}<br>{{#ifNotEquals cart.noOfChild '0'}}{{cart.noOfChild}} x
+                            General
+                            Admission - Child (12 years
+                            old and below){{/ifNotEquals}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <h4 style="padding-top: 20px; padding-bottom: 20px;">Ratings</h4>
+        <div class="rating">
+            <!-- Notice that the stars are in reverse order -->
+            <input type="radio" id="star5" name="rating" value="5" {{#ifEquals review.rating "5"}}checked{{/ifEquals}}>
+            <label for="star5">&#9733;</label>
+            <input type="radio" id="star4" name="rating" value="4" {{#ifEquals review.rating "4"}}checked{{/ifEquals}}>
+            <label for="star4">&#9733;</label>
+            <input type="radio" id="star3" name="rating" value="3" {{#ifEquals review.rating "3"}}checked{{/ifEquals}}>
+            <label for="star3">&#9733;</label>
+            <input type="radio" id="star2" name="rating" value="2" {{#ifEquals review.rating "2"}}checked{{/ifEquals}}>
+            <label for="star2">&#9733;</label>
+            <input type="radio" id="star1" name="rating" value="1" {{#ifEquals review.rating "1"}}checked{{/ifEquals}}>
+            <label for="star1">&#9733;</label>
+        </div>
+        <h4 style="padding-top: 20px;">Feedbacks</h4>
+        <div class="col-12">
+            <div class="form-floating">
+                {{#ifEquals role 'Admin'}}<textarea class="form-control" placeholder="Description" id="reasons"
+                    name="description" style="height: 120px" readonly>{{review.feedback}}</textarea>{{/ifEquals}}
+                {{#ifNotEquals role 'Admin'}}<textarea class="form-control" placeholder="Description" id="reasons"
+                    name="description" style="height: 120px" required>{{review.feedback}}</textarea>{{/ifNotEquals}}
+                <label for="reasons">Description</label>
+                <span class="validation-message" id="reasonsMessage"></span>
+            </div>
+        </div>
+    </div>
+    <!-- Hidden fields -->
+    <input type="hidden" id="attractionid" name="attractionid" value="{{attraction.id}}">
+    <input type="hidden" id="invoiceid" name="invoiceid" value="{{cart.invoiceid}}">
+    <div class="text-center" style="padding: 20px 0;">
+        {{#ifNotEquals role 'Admin'}}<button type="submit" class="btn btn-primary">Submit
+            Review</button>{{/ifNotEquals}}
+    </div>
+</form>
+
+
+<style>
+    .payment {
+        padding: 20px;
+        flex: 1;
+    }
+
+    button {
+        width: 177px;
+        height: 59px;
+        font-size: 22px;
+        font-weight: 500;
+        background: #FD8087;
+        color: #fff;
+        margin: 30px auto 20px auto;
+        padding: 4% 8%;
+        border: 2px solid #828282;
+        border-radius: 20px;
+        transition-duration: 0.5s;
+    }
+
+    .validation-message {
+        color: red;
+        font-size: 12px;
+        display: block;
+        margin-top: 5px;
+    }
+
+    .rating {
+        margin-bottom: 20px;
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: center;
+        margin: auto;
+    }
+
+    .rating input {
+        display: none;
+    }
+
+    .rating label {
+        font-size: 70px;
+        cursor: pointer;
+        padding-right: 50px;
+    }
+
+    .rating label:hover,
+    .rating label:hover~label {
+        color: orange;
+    }
+
+    .rating input:checked~label {
+        color: orange;
+    }
+</style>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Event listeners for form validation
+        document.getElementById('fname').addEventListener('blur', validateFirstName);
+        document.getElementById('fname').addEventListener('input', restrictNameInput);
+        document.getElementById('lname').addEventListener('blur', validateLastName);
+        document.getElementById('lname').addEventListener('input', restrictNameInput);
+        document.getElementById('email').addEventListener('blur', validateEmail);
+        document.getElementById('reasons').addEventListener('blur', validateReasons);
+
+        function restrictNameInput(event) {
+            const input = event.target;
+            input.value = input.value.replace(/[^a-zA-Z\s]/g, '');
+        }
+
+        function validateFirstName() {
+            const firstName = document.getElementById('fname').value.trim();
+            const fnameMessage = document.getElementById('fnameMessage');
+            fnameMessage.textContent = firstName === '' ? 'First Name is required' : '';
+        }
+
+        function validateLastName() {
+            const lastName = document.getElementById('lname').value.trim();
+            const lnameMessage = document.getElementById('lnameMessage');
+            lnameMessage.textContent = lastName === '' ? 'Last Name is required' : '';
+        }
+
+        function validateEmail() {
+            const email = document.getElementById('email').value.trim();
+            const emailMessage = document.getElementById('emailMessage');
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (email === '') {
+                emailMessage.textContent = 'Email is required';
+            } else if (!emailRegex.test(email)) {
+                emailMessage.textContent = 'Invalid email format';
+            } else {
+                emailMessage.textContent = '';
+            }
+        }
+
+        function validateReasons() {
+            const reasons = document.getElementById('reasons').value.trim();
+            const reasonsMessage = document.getElementById('reasonsMessage');
+            reasonsMessage.textContent = reasons === '' ? 'Description is required' : '';
+        }
+
+        function validateForm() {
+            validateFirstName();
+            validateLastName();
+            validateEmail();
+            validateReasons();
+
+            const fnameMessage = document.getElementById('fnameMessage').textContent;
+            const lnameMessage = document.getElementById('lnameMessage').textContent;
+            const emailMessage = document.getElementById('emailMessage').textContent;
+            const reasonsMessage = document.getElementById('reasonsMessage').textContent;
+
+            return !(fnameMessage || lnameMessage || emailMessage || reasonsMessage);
+        }
+    });
+</script>

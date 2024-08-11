@@ -1,0 +1,216 @@
+<div class="container d-flex justify-content-center mt-50 mb-50">
+    <div class="row">
+        <div class="col-md-12 text-right mb-3">
+            <button class="btn btn-primary" id="download"><i class="fas fa-download"></i> PDF</button>
+        </div>
+        <div class="col-md-12">
+            <div class="card" id="invoice">
+                <div class="card-header bg-transparent header-elements-inline">
+                    <h2 class="card-title text-primary"><img src="/img/merlion_img.jpg" alt="journeyjunction logo"
+                            style="width: 80px; height: 80px;">Journey Junction</h2>
+                    <p class="card-title">180 Ang Mo Kio Ave 8, Singapore 569830 <br>+65 6451 5115</p>
+                </div><br>
+                <h4 style="padding-left: 30px;">Customer Details</h4>
+                <table width="100%" style="border-collapse: collapse; ">
+                    <tr>
+                        <td widdth="50%" style="background:#eee;padding-left:100px;">
+                            <strong>Date:</strong> {{ formatDate visitor.createdAt 'DD MMM YYYY'}}<br>
+                            <strong>Payment type:</strong> Credit Card {{visitor.cardType}}<br>
+                            <strong>Delivery type:</strong> E-Ticket(s) via Email<br>
+                        </td>
+                        <td style="background:#eee;padding:20px;">
+                            <strong>Invoice ID:</strong> #{{visitor.invoiceid}}<br>
+                            <strong>E-mail:</strong> {{visitor.email}}<br>
+                            <strong>Phone:</strong>+{{visitor.countryCode}}&nbsp;{{visitor.phone}}<br>
+                        </td>
+                    </tr>
+                </table><br>
+                <div style="padding: 30px;">
+                    {{#each userCart}}
+                    <div class="card rounded-3 mb-4" style="width: 90%; margin: 0 auto;">
+                        <div class="card-body p-4">
+                            <div class="row d-flex justify-content-between align-items-center">
+                                <div class="col-md-2 col-lg-2 col-xl-2">
+                                    <img src="{{attraction.image_path}}" class="img-fluid rounded-3"
+                                        alt="{{attraction.location}}">
+                                </div>
+                                <div class="col-md-6 col-lg-6 col-xl-6">
+                                    <p class="lead fw-normal mb-2">{{attraction.location}}</p>
+                                    <p><span class="text-muted">{{dateOfAttraction}}</span></p>
+                                    <p><span class="text-muted">Ticket(s): </span><br>{{#ifNotEquals noOfAdults
+                                        '0'}}{{noOfAdults}}
+                                        x General Admission - Adult (13 years
+                                        old and above){{/ifNotEquals}}<br>{{#ifNotEquals noOfChild '0'}}{{noOfChild}} x
+                                        General
+                                        Admission - Child (12 years
+                                        old and below){{/ifNotEquals}}</p>
+                                </div>
+                                <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
+                                    <h5 class="mb-0">${{costOfAttraction}}</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {{/each}}
+                </div>
+                <div class="card-body">
+                    <div class="d-md-flex flex-md-wrap">
+                        <div class="pt-2 mb-3 wmin-md-400 ml-auto">
+                            <h6 class="mb-3 text-left">Summary</h6>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <tbody>
+                                        <tr>
+                                            <th class="text-left">Subtotal:</th>
+                                            <td class="text-right">${{totalCost}}</td>
+                                        </tr>
+                                        <tr>
+                                            <th class="text-left">Booking Fee: <span
+                                                    class="font-weight-normal">(25%)</span>
+                                            </th>
+                                            <td class="text-right">$2.00</td>
+                                        </tr>
+                                        <tr>
+                                            <th class="text-left">Total:</th>
+                                            <td class="text-right text-primary">
+                                                <h5 class="font-weight-semibold">${{totaltotal}}</h5>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th class="text-left">Tax Inclusive: GST
+                                                (9%)</th>
+                                            <td class="text-right">
+                                                ${{includegst}}
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer" style="text-align: center;">
+                    <h3>Terms and Conditions</h3>
+                    <p>1. All tickets are non-refundable and non-transferable.</p>
+                    <p>2. Please carry a valid ID proof along with the ticket for entry to the attraction.</p>
+                    <p>3. Entry to the attractions is subject to the attraction's policies and guidelines.</p>
+                    <p>4. The company is not responsible for any loss or damage caused during the visit to the
+                        attractions.</p>
+                    <p>5. In case of any dispute, the decision of the company will be final and binding.</p>
+                    <p>6. Please arrive at the attraction at least 15 minutes before the scheduled time.</p>
+                    <p>7. If eligible, any changes to the booking must be made at least 24 hours in advance.</p>
+                    <p>8. By purchasing the ticket, you agree to abide by all the terms and conditions mentioned above.
+                    </p>
+                    <p>&copy; 2024 JourneyJunction. All Rights Reserved.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    body {
+        margin: 0 auto;
+        font-family: Roboto, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+        font-size: .8125rem;
+        font-weight: 400;
+        line-height: 1.5385;
+        color: #333;
+        text-align: left;
+        background-color: #eee
+    }
+
+    .mt-50 {
+        margin-top: 50px
+    }
+
+    .mb-50 {
+        margin-bottom: 50px
+    }
+
+    .card {
+        word-wrap: break-word;
+        background-color: #fff;
+        background-clip: border-box;
+        border: 1px solid rgba(0, 0, 0, .125);
+        border-radius: .1875rem;
+        width: 100%;
+        max-width: 8.27in;
+        /* A4 page width */
+        margin: 0 auto;
+        /* Center the card */
+    }
+
+    .card-img-actions {
+        position: relative
+    }
+
+    .card-body {
+        margin: 0 auto;
+        -ms-flex: 1 1 auto;
+        flex: 1 1 auto;
+        padding: 1.25rem;
+        text-align: center
+    }
+
+    .card-title {
+        margin-top: 10px;
+        text-align: center;
+        margin: 0 auto;
+    }
+
+    .card-header {
+        padding: .9375rem 1.25rem;
+        margin-bottom: 0;
+        background-color: rgba(0, 0, 0, .02);
+        border-bottom: 1px solid rgba(0, 0, 0, .125)
+    }
+
+    a {
+        text-decoration: none !important
+    }
+
+    .btn-light {
+        color: #333;
+        background-color: #fafafa;
+        border-color: #ddd
+    }
+
+    .header-elements-inline {
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-align: center;
+        align-items: center;
+        -ms-flex-pack: justify;
+        justify-content: space-between;
+        -ms-flex-wrap: nowrap;
+        flex-wrap: nowrap
+    }
+
+    @media (min-width: 768px) {
+        .wmin-md-400 {
+            min-width: 400px !important
+        }
+    }
+
+    .btn-primary {
+        color: #fff;
+        background-color: #FAD676
+    }
+</style>
+<script>
+    window.onload = function () {
+        document.getElementById("download").addEventListener("click", () => {
+            const invoice = this.document.getElementById("invoice");
+            console.log(invoice);
+            console.log(window);
+            var opt = {
+                margin: 0.5,
+                filename: 'invoice.pdf',
+                image: { type: 'jpeg', quality: 1 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+            };
+            html2pdf().from(invoice).set(opt).save();
+        })
+    }
+</script>

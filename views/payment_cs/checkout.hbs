@@ -1,0 +1,170 @@
+<div class="container-xxl py-5">
+    <div class="container">
+        <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+            <h6 class="section-title bg-white text-center text-primary px-3">Checkout</h6>
+            <h1 class="mb-5">CHECKOUT PAGE</h1>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <form class="visitor-form" action="/paycs/visitform" method="post">
+        <h2>Visitor's Information</h2>
+        <label for="fullName">Full Name <span style="color: red;">*</span></label>
+        <input type="text" id="fullName" name="fullName" required>
+
+        <label for="email">Email <span style="color: red;">*</span></label>
+        <input type="email" id="email" name="email" required>
+
+        <label for="phone">Phone <span style="color: red;">*</span></label>
+        <input type="tel" id="phone" name="phone" required>
+
+        <label for="DOB">Date of Birth <span style="color: red;">*</span></label>
+        <input id="DOB" type="date" width="200" name="DOB" required>
+
+        <label for="nationality">Nationality <span style="color: red;">*</span></label>
+        <select id="nationality" name="nationality" required>
+            <option value="">Please Select</option>
+            {{#each nationalities}}
+                <option value="{{name}}">{{name}}</option>
+            {{/each}}
+        </select>
+        {{!-- bradnond did this more marks that way!!! 220692B!!!! --}}
+        <div class="d-flex">
+            <div class="col-xl-1 d-flex align-items-center justify-content-center pt-3">
+                <input type="checkbox" id="termsOfUse" name="termsOfUse" required>
+            </div>
+            <div class="col-xl-11">
+                <label for="termsOfUse">I accept the&nbsp;<a href="#">Terms of Use </a> &nbsp; & &nbsp;<a href="#">
+                        Privacy
+                        Policy</a>&nbsp; set by the vendor. <span style="color: red;">*</span></label>
+            </div>
+        </div>
+        <div class="d-flex">
+            <div class="col-xl-1 d-flex align-items-center justify-content-center pt-3">
+                <input type="checkbox" id="consentMarketing" name="consentMarketing">
+            </div>
+            <div class="col-xl-11">
+                <label for="consentMarketing">I consent to receiving marketing & promotional information from
+                    JourneyJunction.</label>
+            </div>
+        </div>
+        <div class="d-flex">
+            <div class="col-xl-1 d-flex align-items-center justify-content-center pt-3">
+                <input type="checkbox" id="emailConfirmation" name="emailConfirmation" required>
+            </div>
+            <div class="col-xl-11">
+                <label for="emailConfirmation">Kindly ensure your email address is correct. Your Booking Confirmation/
+                    E-Ticket(s) will be sent to this email after the purchase. <span style="color: red;">*</span></label>
+            </div>
+        </div>
+        {{!-- bradnond did this more marks that way!!! 220692B!!!! end --}}
+        <input type="hidden" id="countryCode" name="countryCode" />
+        <input type="hidden" id="isoCode" name="isoCode" />
+        <div class="text-center" style="padding: 20px 0;">
+            <button type="submit" class="btn"
+                style="background-color: #FAD676; color: white; border-radius: 25px; padding: 12px 28px;">Payment</button>
+        </div>
+    </form>
+</div>
+<style>
+    .visitor-form {
+        padding: 20px;
+        flex: 1;
+    }
+
+    .visitor-form h2 {
+        margin-top: 0;
+    }
+
+    .visitor-form label {
+        display: block;
+        margin: 10px 0 5px;
+    }
+
+    .visitor-form input,
+    .visitor-form select {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    .phone-input {
+        display: flex;
+    }
+
+    .phone-input input:first-child {
+        width: 50px;
+        margin-right: 10px;
+        text-align: center;
+        background-color: #e9e9e9;
+    }
+</style>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const phoneInputField = document.querySelector("#phone");
+        const phoneInput = window.intlTelInput(phoneInputField, {
+            initialCountry: "sg", // Set Singapore as the default country
+            utilsScript: "https://cdn.jsdelivr.net/npm/intl-tel-input@23.1.0/build/js/utils.js",
+        });
+
+        // Define phone number lengths for different countries
+        const phoneLengths = {
+            'SG': 8, // Singapore
+            // Add other countries and their phone number lengths as needed
+            // e.g., 'US': 10, 'GB': 11, etc.
+        };
+
+        function updatePhoneNumberConstraints() {
+            const countryData = phoneInput.getSelectedCountryData();
+            const isoCode = countryData.iso2.toUpperCase(); // Get ISO code in uppercase
+            const phoneLength = phoneLengths[isoCode] || 15; // Default length if not specified
+
+            const phoneInputElement = document.querySelector("#phone");
+            phoneInputElement.setAttribute('maxlength', phoneLength);
+            phoneInputElement.setAttribute('pattern', `[0-9]{1,${phoneLength}}`);
+        }
+
+        function getPhoneNumberData(event) {
+            event.preventDefault(); // Prevent the default form submission
+
+            // Validate the form
+            const form = event.target;
+            if (!form.checkValidity()) {
+                form.reportValidity(); // Show validation errors
+                return;
+            }
+
+            const countryData = phoneInput.getSelectedCountryData();
+            const countryCode = countryData.dialCode; // Country code with dial prefix
+            const isoCode = countryData.iso2; // ISO 2-letter country code
+
+            console.log('Country Code:', countryCode);
+            console.log('ISO Code:', isoCode);
+
+            // Set hidden fields with these values
+            document.querySelector('#countryCode').value = countryCode;
+            document.querySelector('#isoCode').value = isoCode;
+
+            // Update phone number constraints based on the selected country
+            updatePhoneNumberConstraints();
+
+            // Submit the form after setting the hidden fields
+            form.submit();
+        }
+
+        // Attach the submit event listener to the form
+        document.querySelector('.visitor-form').addEventListener('submit', getPhoneNumberData);
+
+        // Restrict input to numeric values only
+        phoneInputField.addEventListener('input', function (event) {
+            // Allow only numeric input
+            this.value = this.value.replace(/[^0-9]/g, '');
+        });
+
+        // Update phone number constraints when the country is changed
+        phoneInputField.addEventListener('countrychange', updatePhoneNumberConstraints);
+    });
+
+</script>

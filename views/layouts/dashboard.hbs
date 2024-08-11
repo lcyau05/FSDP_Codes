@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>JourneyJunction</title>
+    <link rel="icon" href="./img/merlion_img.jpg" type="image/x-icon">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <!-- Favicon -->
+    <link href="./img/favicon.ico" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Nunito:wght@600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="./lib/animate/animate.min.css" rel="stylesheet">
+    <link href="./lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="./lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="./css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Template Stylesheet -->
+    <link href="./css/style.css" rel="stylesheet">
+    {{!-- hp --}}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@23.1.0/build/css/intlTelInput.css">
+    <!-- Include jQuery -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+    <!-- Include Gijgo CSS -->
+    <link href="https://unpkg.com/gijgo@1.9.14/css/gijgo.min.css" rel="stylesheet" type="text/css" />
+
+    <!-- Include Gijgo JavaScript -->
+    <script src="https://unpkg.com/gijgo@1.9.14/js/gijgo.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+</head>
+
+<body>
+    <!-- Spinner Start -->
+    <div id="spinner"
+        class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+        <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
+    <!-- Spinner End -->
+    {{> navigation}}
+    <br><br><br><br>
+    <div class="container-xxl py-5">
+        <div class="container">
+            <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+                <h6 class="section-title bg-white text-center text-primary px-3">- VIEW PERSONAL DETAILS -</h6>
+                <h1 class="mb-5">USER DASHBOARD</h1>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-2" style="text-align: center; justify-content: space-between; background-color:aliceblue;">
+            <br>
+            <ul>
+                <li class="active" style="padding-bottom: 20px;"><i class="fas fa-solid fa-user"
+                        style="font-size:xx-large; color: #FAD676;"></i>&nbsp
+                    &nbsp User ID:
+                    {{user.id}}
+                </li>
+                <li><a href="http://localhost:3000/user_details">User Details</a></li>
+                <li><a href="#">Booking Details</a></li>
+                <li><a href="#">Personalised Assessments</a></li>
+                <li><a href="http://localhost:3000/purchaseDetails">Purchase History</a></li>
+                {{#ifEquals user.role 'Admin'}}
+                <li><a href="http://localhost:3000/dashboard">Admin View</a></li>
+                {{/ifEquals}}
+            </ul>
+        </div>
+        <div class="col-10" style="padding-left: 100px;">
+            {{{body}}}
+        </div>
+    </div>
+    <script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"></script>
+    <df-messenger intent="WELCOME" chat-title="JourneyJunction" agent-id="641254c0-d849-491b-b902-b945587a7b98"
+        language-code="en"></df-messenger>
+    {{> footer}}
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="./lib/wow/wow.min.js"></script>
+    <script src="./lib/easing/easing.min.js"></script>
+    <script src="./lib/waypoints/waypoints.min.js"></script>
+    <script src="./lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="./lib/tempusdominus/js/moment.min.js"></script>
+    <script src="./lib/tempusdominus/js/moment-timezone.min.js"></script>
+    <script src="./lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+
+    <!-- Template Javascript -->
+    <script src="./js/main.js"></script>
+
+    {{!-- hp --}}
+    <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@23.1.0/build/js/intlTelInput.min.js"></script>
+    <script>
+        const input = document.querySelector("#phone");
+        window.intlTelInput(input, {
+            initialCountry: "sg", // Set Singapore as the default country
+            utilsScript: "https://cdn.jsdelivr.net/npm/intl-tel-input@23.1.0/build/js/utils.js",
+        });
+    </script>
+    <style>
+        ul {
+            list-style: none;
+
+            li {
+                position: relative;
+
+                a {
+                    line-height: 20px;
+                    margin: 0 auto;
+                    text-align: center;
+                    text-transform: uppercase;
+                    text-decoration: none;
+                    letter-spacing: 0.4em;
+                    color: rgba(#FFF, 0.35);
+                    display: block;
+                    transition: all ease-out 300ms;
+                    padding: 20px;
+                }
+
+                &.active a {
+                    color: white;
+                }
+
+                &:not(.active)::after {
+                    opacity: 0.2;
+                }
+
+                &:not(.active):hover a {
+                    color: rgba(#FFF, 0.75);
+                }
+
+                &::after {
+                    content: '';
+                    position: absolute;
+                    width: 100%;
+                    height: 0.2em;
+                    background: black;
+                    left: 0;
+                    bottom: 0;
+                    background-image: linear-gradient(to right, #5e42a6, #b74e91)
+                }
+            }
+        }
+    </style>
+</body>
+
+</html>

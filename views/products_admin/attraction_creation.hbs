@@ -1,0 +1,78 @@
+<style>
+    .form-container {
+            width: 80%;
+            max-width: 600px; /* Adjust width as needed */
+            margin: 20px auto; /* Center align and provide space */
+            background-color: #f0f0f0; /* Light grey background */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Box shadow for depth */
+        }
+
+    .form-field {
+            margin-bottom: 15px;
+        }
+    
+    .form-label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+    
+    .form-input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+    
+    .form-button {
+            background-color: #ABEFA5;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-right: 10px; /* Space between buttons */
+        }
+
+        .form-button:hover {
+            background-color: #36d627; /* Darker shade on hover */
+        }
+
+</style>
+
+<div style="text-align:center">
+<h1 class="mb-5">Attractions Creation</h1>
+</div>
+<body>
+<div class="form-container">
+    <form id="attractcreation" action="/attractions/submission" method="post">
+        <div class="form-field">
+            <label for="location" class="form-label">Attraction Name: </label>
+            <textarea id="location" name="location" class="form-input" rows="1"></textarea>
+        </div>
+
+        <div class="form-field">
+            <label for="priceadult" class="form-label">Pricing for Adult: </label>
+            <textarea id="priceadult" name="priceadult" class="form-input" rows="1"></textarea>
+        </div>
+
+        <div class="form-field">
+            <label for="pricechild" class="form-label">Pricing for Child: </label>
+            <textarea id="pricechild" name="pricechild" class="form-input" rows="1"></textarea>
+        </div>
+
+        <div class="form-field">
+            <label for="image_path" class="form-label">Image Path: </label>
+            <textarea id="image_path" name="image_path" class="form-input" rows="1"></textarea>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="form-button">Submit</button>
+        </div>
+    </form>
+</div>

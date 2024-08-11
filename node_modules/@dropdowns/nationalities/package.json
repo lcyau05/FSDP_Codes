@@ -1,0 +1,28 @@
+{
+  "name": "@dropdowns/nationalities",
+  "version": "1.0.0",
+  "description": "A list of all nationalities that can be used in form dropdown options",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Francis Andres (PDC Inc.)",
+  "license": "MIT",
+  "keywords": [
+    "nationality",
+    "nationalities",
+    "dropdown",
+    "dropdown nationalities",
+    "nationality list",
+    "nationality dropdown"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/paradigmdcinc/dropdowns.git",
+    "directory": "packages/nationalities"
+  },
+  "bugs": {
+    "url": "https://github.com/paradigmdcinc/dropdowns/issues"
+  },
+  "homepage": "https://github.com/paradigmdcinc/dropdowns#readme"
+}

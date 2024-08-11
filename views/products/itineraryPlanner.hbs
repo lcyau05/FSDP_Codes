@@ -1,0 +1,488 @@
+<style>
+body {
+    font-family: 'Nunito', sans-serif;
+    background-color: #white;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+h1 {
+    color: #black; /* Bright yellow-orange for headings */
+    margin: 20px 0;
+}
+
+.container-itinerary {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+input[type="date"],
+input[type="text"],
+input[type="time"] {
+    padding: 8px;
+    border: 1px solid #e0e0e0; /* Light grey border */
+    border-radius: 4px;
+    font-size: 16px;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+button {
+    background-color: #f39c12; /* Yellow button color */
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 15px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #e67e22; /* Darker yellow on hover */
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    padding: 10px;
+    border: 1px solid #e0e0e0;
+    text-align: left;
+}
+
+th {
+    background-color: #fdf5e6; /* Light yellow for header */
+    font-weight: bold;
+}
+
+.delete-btn {
+    background-color: #e74c3c; /* Red for delete button */
+}
+
+.delete-btn:hover {
+    background-color: #c0392b; /* Darker red on hover */
+}
+
+.edit-btn {
+    background-color: #ddcf53;
+}
+
+.edit-btn:hover {
+    background-color: #e9ce36;
+}
+
+.form-container {
+    width: 80%;
+    max-width: 600px;
+    margin: 20px auto;
+    background-color: #fff8e1; /* Light yellow background */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.form-field {
+    margin-bottom: 15px;
+}
+
+.form-label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.form-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 14px;
+}
+
+.form-select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 14px;
+}
+
+.form-button {
+    background-color: #f39c12; /* Yellow button color */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-right: 10px;
+}
+
+.form-button:hover {
+    background-color: #e67e22; /* Darker yellow on hover */
+}
+
+.form-actions {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.container-planner {
+    margin: 20px auto;
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 1200px;
+    overflow: hidden;
+}
+
+.export {
+    background-color: #f39c12; /* Yellow export button */
+    color: white;
+}
+
+.export:hover {
+    background-color: #e67e22; /* Darker yellow on hover */
+}
+
+/* Search Form Styling */
+#searchForm {
+    display: flex;
+    gap: 10px; /* Space between elements */
+    margin-bottom: 20px;
+    width: fit-content; /* Adjust width to fit content */
+}
+
+#searchForm .form-label {
+    margin: 0; /* Remove margin for label to fit in row */
+    font-size: 16px; /* Adjust font size if needed */
+}
+
+#searchForm input[type="date"] {
+    padding: 8px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+#searchForm button {
+    background-color: #f39c12; /* Yellow button color */
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 15px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#searchForm button:hover {
+    background-color: #e67e22; /* Darker yellow on hover */
+}
+
+
+/* Email Form Styling */
+.email-form-container {
+    margin: 20px auto;
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #fff8e1; /* Light yellow background */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+}
+
+.email-form-field {
+    margin-bottom: 15px;
+}
+
+.email-form-label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.email-form-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 14px;
+}
+
+.email-form-button {
+    background-color: #f39c12; /* Yellow button color */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.email-form-button:hover {
+    background-color: #e67e22; /* Darker yellow on hover */
+}
+
+    </style>
+
+
+<div class="container-xxl py-5">
+    <div class="container">
+        <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+            <h1 class="mb-5">ITINERARY PLANNER</h1>
+            <h6 class="section-title bg-white text-center text-primary px-3">- PLAN YOUR TIME WISELY IN SINGAPORE -</h6>
+        </div>
+    </div>
+</div>
+
+<div class="form-container">
+    <form action="/itinerary/add" method="POST">
+        <div class="form-field">
+            <label for="date" class="form-label">Date *</label>
+            <input type="date" id="date" name="date" required>
+        </div>
+        
+        <div class="form-field">
+            <label for="activity" class="form-label">Activity *</label>
+            <input type="text" name="activity" placeholder="E.g., Visiting the Zoo" required>
+        </div>
+       
+       <div class="form-field">
+            <label for="location" class="form-label">Location *</label>
+            <input type="text" name="location" placeholder="E.g., Singapore Zoo" required>
+       </div>
+        
+        <div class="form-field">
+            <label for="time" class="form-label">Time *</label>
+            <input type="time" name="time" required>
+        </div>
+        
+        <div class="form-actions">
+            <button type="submit">Add Item</button>
+        </div>
+    </form>
+</div>
+
+<div class="container-planner">
+    {{#if itineraryItems.length}}
+
+<form id="searchForm">
+    <label for="date" class="form-label">Date: </label>
+    <input type="date" id="searchDate">
+<button type="button" onclick="filterItinerary()">Search</button>    <button class="export" onclick="exportTableToCSV('ItineraryPlanner.csv')">Export to CSV</button>
+
+</form>
+    <table border="1">
+    <thead>
+        <tr>
+            <th>DATE</th>
+            <th>TIME</th>
+            <th>ACTIVITY</th>
+            <th>LOCATION</th>
+            <th>EDIT</th>
+            <th>DELETE</th>
+        </tr>
+    </thead>
+    <tbody id="itineraryTableBody">
+        {{#each itineraryItems}}
+        <tr id="itineraryItem-{{id}}">
+            <td class="date">{{date}}</td>
+            <td class="time">{{time}}</td>
+            <td class="activity">{{activity}}</td>
+            <td class="location">{{location}}</td>
+            <td>
+                <button type="button" class="edit-btn" onclick="openEditForm('{{id}}', '{{date}}', '{{time}}', '{{activity}}', '{{location}}')">Edit</button>
+            </td>
+            <td>
+                <button type="button" class="delete-btn" onclick="deleteRecord('{{id}}')">Delete</button>
+            </td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+<br>
+
+<div class="email-form-container">
+    <form id="emailForm" action="/itinerary/send-itinerary-email" method="POST">
+        <div class="email-form-field">
+            <label for="email" class="email-form-label">Email *</label>
+            <input type="email" id="email" name="email" class="email-form-input" placeholder="E.g., kh@gmail.com" required>
+        </div>
+        <div class="form-actions">
+            <button type="submit" class="email-form-button">Send Itinerary via Email</button>
+        </div>
+    </form>
+</div>
+
+{{else}}
+    <p>No itinerary items yet.</p>
+{{/if}}
+</div>
+
+<!-- Edit Form Modal -->
+<div id="editModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeEditForm()">&times;</span>
+        <form id="editForm" action="/itinerary/updateItinerary" method="POST">
+            <input type="hidden" id="edit-id" name="id">
+            <input type="date" id="edit-date" name="date" required>
+            <input type="text" id="edit-activity" name="activity" placeholder="Activity" required>
+            <input type="text" id="edit-location" name="location" placeholder="Location" required>
+            <input type="time" id="edit-time" name="time" required>
+            <button type="submit">Update Item</button>
+        </form>
+    </div>
+</div>
+
+<script>
+      // Function to set the minimum and maximum date for the date input
+            function setDateConstraints() {
+                const today = new Date();
+                const yyyy = today.getFullYear();
+                let mm = today.getMonth() + 1; // Months are zero-based
+                let dd = today.getDate();
+
+                // Add leading zeroes for month and date
+                if (mm < 10) mm = '0' + mm;
+                if (dd < 10) dd = '0' + dd;
+
+                // Set minimum date to today
+                const minDate = yyyy + '-' + mm + '-' + dd;
+                document.getElementById('date').setAttribute('min', minDate);
+
+                // Calculate date one month from today
+                const oneMonthFromToday = new Date(today);
+                oneMonthFromToday.setMonth(today.getMonth() + 1);
+
+                const yyyyPlusOneMonth = oneMonthFromToday.getFullYear();
+                let mmPlusOneMonth = oneMonthFromToday.getMonth() + 1; // Months are zero-based
+                let ddPlusOneMonth = oneMonthFromToday.getDate();
+
+                // Add leading zeroes for month and date
+                if (mmPlusOneMonth < 10) mmPlusOneMonth = '0' + mmPlusOneMonth;
+                if (ddPlusOneMonth < 10) ddPlusOneMonth = '0' + ddPlusOneMonth;
+
+                // Set maximum date to one month from today
+                const maxDate = yyyyPlusOneMonth + '-' + mmPlusOneMonth + '-' + ddPlusOneMonth;
+                document.getElementById('date').setAttribute('max', maxDate);
+            }
+
+            // Set date constraints on page load
+            setDateConstraints();
+
+    function deleteRecord(id) {
+        if (confirm("Are you sure you want to delete this record?")) {
+                fetch(`/deleteItin/${id}`, {
+                    method: 'DELETE',
+                })
+                .then(response => {
+                    if (response.ok) {
+                        location.reload();
+                        alert("Record deleted successfully");
+                    } else {
+                        alert("Failed to delete the record");
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert("Deleted the record");
+                });
+            }
+        }
+    
+    function openEditForm(id, date, time, activity, location) {
+        document.getElementById('edit-id').value = id;
+        document.getElementById('edit-date').value = date;
+        document.getElementById('edit-time').value = time;
+        document.getElementById('edit-activity').value = activity;
+        document.getElementById('edit-location').value = location;
+
+        document.getElementById('editModal').style.display = "block";
+    }
+
+    function closeEditForm() {
+        document.getElementById('editModal').style.display = "none";
+    }
+
+    function filterItinerary() {
+    const searchDate = document.getElementById('searchDate').value;
+    const rows = document.querySelectorAll('#itineraryTableBody tr');
+
+    rows.forEach(row => {
+        const date = row.querySelector('.date').textContent;
+        if (searchDate && date !== searchDate) {
+            row.style.display = 'none';
+        } else {
+            row.style.display = '';
+        }
+    });
+}
+
+document.getElementById('searchForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    filterItinerary();
+});
+
+function exportTableToCSV(filename) {
+    var csv = [];
+    var rows = document.querySelectorAll("#itineraryTableBody tr:not([style*='display: none'])");
+
+    // Include the header row, excluding the last 2 columns (EDIT and DELETE)
+    var headers = document.querySelectorAll("table thead tr th");
+    var headerRow = [];
+    headers.forEach((header, index) => {
+        if (index < headers.length - 2) { // Exclude last 2 columns
+            headerRow.push(header.innerText);
+        }
+    });
+    csv.push(headerRow.join(","));
+
+    // Add the data rows, excluding the last 2 columns (EDIT and DELETE)
+    rows.forEach(row => {
+        var rowData = [];
+        var cols = row.querySelectorAll("td");
+
+        for (var j = 0; j < cols.length - 2; j++) { // Exclude last 2 columns
+            rowData.push(cols[j].innerText);
+        }
+
+        csv.push(rowData.join(","));
+    });
+
+    // Create CSV file
+    var csvFile = new Blob([csv.join("\n")], { type: "text/csv" });
+
+    // Create a link to download the file
+    var downloadLink = document.createElement("a");
+
+    downloadLink.download = filename;
+    downloadLink.href = window.URL.createObjectURL(csvFile);
+    downloadLink.style.display = "none";
+
+    // Trigger Download
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
+}
+</script>

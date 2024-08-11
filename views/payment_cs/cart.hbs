@@ -1,0 +1,151 @@
+<div class="container-xxl py-5">
+    <div class="container">
+        <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+            <h6 class="section-title bg-white text-center text-primary px-3">Cart</h6>
+            <h1 class="mb-5">Shopping Cart</h1>
+        </div>
+    </div>
+</div>
+<section class="h-100">
+    <div class="container h-100 py-2">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-9" style="padding-right: 50px;">
+                {{#if userCart.length}}
+                {{#each userCart}}
+                <div class="card rounded-3 mb-4">
+                    <div class="card-body p-4">
+                        <div class="row d-flex justify-content-between align-items-center">
+                            <div class="col-md-2 col-lg-2 col-xl-2">
+                                <img src="{{attraction.image_path}}" class="img-fluid rounded-3"
+                                    alt="{{attraction.location}}">
+                            </div>
+                            <div class="col-md-6 col-lg-6 col-xl-6">
+                                <p class="lead fw-normal mb-2">{{attraction.location}}<button class="bookedit"
+                                        style="background-color: transparent; border: none;"
+                                        data-attractionId="{{attractionId}}"><i class="fas fa-pencil-alt"
+                                            style="color: #a18d4b;"></i></button></p>
+                                <p><span class="text-muted">{{ formatDate dateOfAttraction 'DD MMM YYYY'}}</span></p>
+                                <p><span class="text-muted">Ticket(s): </span><br>{{#ifNotEquals noOfAdults
+                                    '0'}}{{noOfAdults}}
+                                    x General Admission - Adult (13 years
+                                    old and above){{/ifNotEquals}}<br>{{#ifNotEquals noOfChild '0'}}{{noOfChild}} x
+                                    General
+                                    Admission - Child (12 years
+                                    old and below){{/ifNotEquals}}</p>
+                            </div>
+                            <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
+                                <h5 class="mb-0">${{costOfAttraction}}</h5>
+                            </div>
+                            <div class="col-md-1 col-lg-1 col-xl-1 text-end">
+                                <a href="javascript:void(0);" class="text-danger delete-attraction"
+                                    data-attractionId="{{attractionId}}"><i class="fas fa-trash fa-lg"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {{/each}}
+                {{else}}
+                <h3>Nothing yet...Let's go shopping! <i class="fas fa-plane-departure" style="color: #FAD676;"
+                        onclick="window.location.href = '/retrieveAttract';"></i> </h3>
+                {{/if}}
+            </div>
+            <div class="col-3 summary card-body">
+                <h3 style="text-align: center; padding-top: 30px; padding-bottom: 20px;">Summary</h3>
+                <table style="width: 100%;">
+                    <tr>
+                        <td style="text-align: center; font-size: 18px; padding-bottom: 15px;">Subtotal</td>
+                        <td style="text-align: center; font-size: 18px; padding-bottom: 15px;">${{totalCost}}</td>
+                    </tr>
+                    {{!-- <tr>
+                        <td style="text-align: center; font-size: 18px; padding-bottom: 15px;">Promo Code</td>
+                        <td style="text-align: center; font-size: 18px; padding-bottom: 15px;">- $0.00</td>
+                    </tr> --}}
+                    <tr>
+                        <td style="text-align: center; font-size: 18px; padding-bottom: 15px;">Booking Fee
+                        </td>
+                        <td style="text-align: center; font-size: 18px; padding-bottom: 15px;">
+                            $2.00
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: center; font-size: 18px; padding-bottom: 15px; font-weight: bold;">Total
+                        </td>
+                        <td style="text-align: center; font-size: 18px; padding-bottom: 15px; font-weight: bold;">
+                            ${{totaltotal}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: center; font-size: 18px; padding-bottom: 15px;">Tax Inclusive:<br> GST
+                            (9%)
+                        </td>
+                        <td style="text-align: center; font-size: 18px; padding-bottom: 20px;">${{includegst}}</td>
+                    </tr>
+                </table>
+                <div class="d-flex flex-column align-items-center">
+                    <button type="button" class="btn btn-primary mb-2"
+                        style="border-radius: 20px; font-size: 18px; background-color:rgb(81, 166, 138);">Promo
+                        Code?</button>
+                    <button type="button" class="btn btn-primary mb-2" style="border-radius: 20px; font-size: 23px;"
+                        onclick="window.location.href = '/checkout';">Proceed to Pay</button>
+                    <a href="http://localhost:3000/retrieveAttract">Continue Shopping...</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<style>
+    .summary {
+        width: 285px;
+        height: 500px;
+        border-radius: 20px;
+        background: #FAF7E9;
+        margin: 0 auto;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        text-align: center;
+    }
+</style>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.bookedit').forEach(button => {
+            button.addEventListener('click', async function () {
+                const attractionId = this.getAttribute('data-attractionId');
+                $.ajax({
+                    type: 'POST',
+                    url: '/attractions/booking',
+                    data: { attractionId: attractionId },
+                    success: function (response) {
+                        console.log('Booking updated successfully:', response);
+                        window.location.href = '/book';
+                    },
+                    error: function (err) {
+                        console.error('Error updating booking:', err);
+                    }
+                });
+            });
+        });
+
+        document.querySelectorAll('.delete-attraction').forEach(button => {
+            button.addEventListener('click', function () {
+                const attractionId = this.getAttribute('data-attractionId');
+                const confirmation = confirm("Are you sure you want to delete this item from your cart?");
+                if (confirmation) {
+                    $.ajax({
+                        type: 'POST',
+                        url: '/paycs/delete',
+                        data: { attractionId: attractionId },
+                        success: function (response) {
+                            console.log('Attraction deleted successfully:', response);
+                            location.reload();
+                        },
+                        error: function (err) {
+                            console.error('Error deleting attraction:', err);
+                        }
+                    });
+                }
+            });
+        });
+    });
+</script>

@@ -1,0 +1,50 @@
+{{#ifEquals user.role 'Admin'}}
+<button class="btn btn-primary"
+    style="background-color: transparent; color: black; border-radius: 20px; border: 2px solid #000; margin-right: 10px;"
+    onclick="admintab('PurSales')">Purchase Sales</button><br><br>
+{{/ifEquals}}
+<div id="PurHistory" class="Icyau05">
+    <h1>Sales Chart</h1>
+    <div style="width: 80%; margin: auto;">
+        <canvas id="salesChart"></canvas>
+    </div>
+</div>
+<script>
+    fetch('/sales-data')
+        .then(response => response.json())
+        .then(data => {
+            const ctx = document.getElementById('salesChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: data.dates,
+                    datasets: [{
+                        label: 'Sales',
+                        data: data.totals,
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        x: {
+                            beginAtZero: true
+                        },
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        });
+
+    function admintab(department) {
+        var i;
+        var x = document.getElementsByClassName("admin");
+        for (i = 0; i < x.length; i++) {
+            x[i].style.display = "none";
+        }
+        document.getElementById(department).style.display = "block";
+    }
+</script>

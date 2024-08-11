@@ -1,0 +1,152 @@
+<style>
+        /* General styling */
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #white;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        hr {
+            border: 0;
+            height: 1px;
+            background: #ddd;
+            margin: 20px auto;
+            width: 80%;
+        }
+
+        /* Attractions list styling */
+        .attractions-list {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px; /* Gap between items */
+        }
+
+        .attraction-item {
+            background: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            width: 300px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            overflow: hidden; /* Ensure content does not overflow */
+            transition: transform 0.3s, box-shadow 0.3s; /* Smooth transitions */
+        }
+
+        .attraction-item:hover {
+            transform: translateY(-5px); /* Slight lift on hover */
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Enhanced shadow on hover */
+        }
+
+        .attraction-image {
+            width: 100%;
+            height: 200px; /* Fixed height for consistency */
+            object-fit: cover; /* Ensure image covers the area */
+            border-bottom: 1px solid #ddd;
+        }
+
+        .attraction-info {
+            padding: 15px;
+            text-align: center;
+        }
+
+        .attraction-info h2 {
+            font-size: 1.5rem;
+            color: #333;
+            margin: 10px 0;
+        }
+
+        .attraction-info p {
+            font-size: 1rem;
+            color: #666;
+            margin: 5px 0;
+        }
+
+        /* Button styling */
+        .book-button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-top: 10px;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            border: none;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .book-button:hover {
+            background-color: #0056b3;
+            transform: scale(1.05); /* Slightly enlarge button on hover */
+        }
+
+        .book-button:focus {
+            outline: none; /* Remove outline on focus */
+            box-shadow: 0 0 0 3px rgba(38, 143, 255, 0.5); /* Add custom focus ring */
+        }
+
+        /* No records message styling */
+        h3 {
+            text-align: center;
+            color: #999;
+            font-size: 1.2rem;
+            margin: 20px 0;
+        }
+</style>
+<div class="container-xxl py-5">
+    <div class="container">
+        <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+            <h1 class="mb-5">ATTRACTIONS</h1>
+            <h6 class="section-title bg-white text-center text-primary px-3">- ENJOY YOUR TIME IN SINGAPORE WITH US -</h6>
+        </div>
+    </div>
+</div>
+<hr>
+{{#if attracts.length}}
+<ul class="attractions-list">
+    {{#each attracts}}
+    <li class="attraction-item">
+        <img src="{{image_path}}" alt="{{location}}" class="attraction-image" />
+        <div class="attraction-info">
+            <h2>{{location}}</h2>
+            <p>Adult: ${{priceadult}}</p>
+            <p>Child: ${{pricechild}}</p>
+            {{!-- <a href="/book" class="book-button" data-id="{{id}}" data-image="{{image_path}}"
+                data-location="{{location}}" data-priceadult="{{priceadult}}" data-pricechild="{{pricechild}}">Book</a> --}}
+            <button class="book-button bookmore" style="border: none;" data-id="{{id}}">Book</button>
+        </div>
+    </li>
+    {{/each}}
+</ul>
+{{else}}
+<h3>No records found</h3>
+{{/if}}
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Add click event listeners to all buttons with class 'view-policy'
+        document.querySelectorAll('.bookmore').forEach(button => {
+            button.addEventListener('click', async function () {
+                const attractionid = this.getAttribute('data-id');
+                $.ajax({
+                    type: 'POST',
+                    url: '/attractions/booking', // Adjust the URL as per your backend route
+                    data: { attractionId: attractionid },
+                    success: function (response) {
+                        console.log('Booking updated successfully:', response);
+                        window.location.href = '/book'; // Redirect to success page
+                    },
+                    error: function (err) {
+                        console.error('Error updating booking:', err);
+                        // Handle errors
+                    }
+                });
+            });
+        });
+    });
+</script>

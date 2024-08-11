@@ -1,0 +1,70 @@
+<head>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v2.8.1/mapbox-gl.css' rel='stylesheet' />
+    <script src='https://api.mapbox.com/mapbox-gl-js/v2.8.1/mapbox-gl.js'></script>
+    <script
+        src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.0/mapbox-gl-geocoder.min.js'></script>
+    <link rel='stylesheet'
+        href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.0/mapbox-gl-geocoder.css'
+        type='text/css' />
+</head>
+
+<style>
+    #map {
+        width: 100%;
+        height: 400px;
+        margin-top: 1rem;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        overflow: hidden;
+    }
+
+    .mapboxgl-ctrl-geocoder--input {
+        border-radius: 100px;
+        padding: 0.8rem;
+        border: 1px solid #ccc;
+        width: calc(100% - 50px);
+    }
+
+    .mapboxgl-ctrl-geocoder--input:focus {
+        box-shadow: 0 0 0 .25rem rgba(253, 128, 135, 0.2);
+        border: solid 1px var(--main-color);
+    }
+
+    .mapboxgl-ctrl-geocoder {
+        margin: 1rem 0;
+    }
+
+    .mapboxgl-ctrl-geocoder--suggestions {
+        border-radius: 5px;
+    }
+</style>
+
+
+<div class="container-product">
+    <div id="map" style="width: 100%; height: 400px;"></div>
+    <div id="geocoder" style="width: 100%; margin-bottom: 20px;" value="{{attraction.location}}"></div>
+    <!-- Existing content -->
+</div>
+
+<script>
+    mapboxgl.accessToken = 'pk.eyJ1Ijoia2thaGhhdXUiLCJhIjoiY2x6MnRzZW1xMzQ0YzJpcHNrdjBxNmdzbCJ9.8O6jzQF2a4P59SSx44GMWQ';
+    const map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/mapbox/streets-v11',
+        center: [103.8198, 1.3521], // Coordinates of Singapore
+        zoom: 12
+    });
+
+    const geocoder = new MapboxGeocoder({
+        accessToken: mapboxgl.accessToken,
+        mapboxgl: mapboxgl,
+        placeholder: 'Search',
+        countries: 'sg'
+    });
+
+    document.getElementById('map').appendChild(geocoder.onAdd(map));
+
+    geocoder.on('result', function (e) {
+        document.getElementById('workshop_venue').value = e.result.place_name;
+    });
+</script>

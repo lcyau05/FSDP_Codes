@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        body {
+            margin: 0 auto;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            color: #333;
+            background-color: #f9f9f9;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            background-color: #fff;
+            margin: 0 auto;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            background-color: #f8f8f8;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .header img {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 10px;
+        }
+
+        .header h2 {
+            margin: 0;
+            font-size: 24px;
+            color: #333;
+        }
+
+        .header p {
+            margin: 5px 0 0;
+            font-size: 14px;
+            color: #777;
+        }
+
+        .content {
+            padding: 20px;
+        }
+
+        .content h4 {
+            margin: 0 0 10px;
+            font-size: 18px;
+            color: #333;
+        }
+
+        .content table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .content td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            background-color: #f9f9f9;
+        }
+
+        .content .details td {
+            padding: 10px 20px;
+        }
+
+        .card {
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .card img {
+            width: 100%;
+            height: auto;
+        }
+
+        .card-body {
+            padding: 20px;
+            text-align: left;
+        }
+
+        .card-body h5 {
+            margin: 0;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .summary {
+            padding: 20px;
+            border-top: 1px solid #ddd;
+        }
+
+        .summary h6 {
+            margin: 0 0 10px;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .summary table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .summary td {
+            padding: 5px;
+            border: none;
+        }
+
+        .summary .text-right {
+            text-align: right;
+        }
+
+        .footer {
+            padding: 20px;
+            text-align: center;
+            border-top: 1px solid #ddd;
+            background-color: #f8f8f8;
+        }
+
+        .footer p {
+            margin: 5px 0;
+            font-size: 12px;
+            color: #777;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h2>Journey Junction</h2>
+            <p>180 Ang Mo Kio Ave 8, Singapore 569830<br>+65 6451 5115</p>
+        </div>
+        <div class="content">
+            <h4>Customer Details</h4>
+            <table class="details">
+                <tr>
+                    <td><strong>Date:</strong> {{visitor.createdAt}}<br><strong>Payment type:</strong> Credit Card
+                        {{visitor.cardType}}<br><strong>Delivery type:</strong> E-Ticket(s) via Email</td>
+                    <td><strong>Invoice ID:</strong> #{{visitor.invoiceid}}<br><strong>E-mail:</strong>
+                        {{visitor.email}}<br><strong>Phone:</strong>+{{visitor.countryCode}} {{visitor.phone}}</td>
+                </tr>
+            </table> <br>
+            {{#each userCart}}
+            <div class="card">
+                <div class="card-body">
+                    <h5>{{attraction.location}}</h5>
+                    <p>Date: {{dateOfAttraction}}<br>Ticket(s): </span><br>{{#ifNotEquals noOfAdults
+                        '0'}}{{noOfAdults}}
+                        x General Admission - Adult (13 years
+                        old and above){{/ifNotEquals}}<br>{{#ifNotEquals noOfChild '0'}}{{noOfChild}} x
+                        General
+                        Admission - Child (12 years
+                        old and below){{/ifNotEquals}}
+                    </p>
+                    <p><strong>Cost:</strong> ${{costOfAttraction}}</p>
+                </div>
+            </div>
+            {{/each}}
+        </div>
+        <div class="summary">
+            <h6>Summary</h6>
+            <table>
+                <tr>
+                    <td>Subtotal:</td>
+                    <td class="text-right">${{totalCost}}</td>
+                </tr>
+                <tr>
+                    <td>Booking Fee: <span class="font-weight-normal">(25%)</span></td>
+                    <td class="text-right">$2.00</td>
+                </tr>
+                <tr>
+                    <td>Total:</td>
+                    <td class="text-right"><strong>${{totaltotal}}</strong></td>
+                </tr>
+                <tr>
+                    <td>Tax Inclusive: GST (9%)</td>
+                    <td class="text-right">${{includegst}}</td>
+                </tr>
+            </table>
+        </div>
+        <div class="footer">
+            <h3>Terms and Conditions</h3>
+            <p>1. All tickets are non-refundable and non-transferable.</p>
+            <p>2. Please carry a valid ID proof along with the ticket for entry to the attraction.</p>
+            <p>3. Entry to the attractions is subject to the attraction's policies and guidelines.</p>
+            <p>4. The company is not responsible for any loss or damage caused during the visit to the attractions.</p>
+            <p>5. In case of any dispute, the decision of the company will be final and binding.</p>
+            <p>6. Please arrive at the attraction at least 15 minutes before the scheduled time.</p>
+            <p>7. If eligible, any changes to the booking must be made at least 24 hours in advance.</p>
+            <p>8. By purchasing the ticket, you agree to abide by all the terms and conditions mentioned above.</p>
+            <p>&copy; 2024 Journey Junction. All Rights Reserved.</p>
+        </div>
+    </div>
+</body>
+
+</html>
